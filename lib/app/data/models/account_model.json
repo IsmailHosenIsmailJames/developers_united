@@ -1,0 +1,11 @@
+{
+    "userName": "userName",
+    "userEmail": "userEmail",
+    "img": "img",
+    "posts": [
+        "path"
+    ],
+    "followers": [
+        "followers"
+    ]
+}
