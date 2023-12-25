@@ -140,7 +140,7 @@ class _PublicProfilePageState extends State<PublicProfilePage> {
           ],
         ),
         const Divider(),
-        widget.uid == FirebaseAuth.instance.currentUser!.uid
+        widget.uid != FirebaseAuth.instance.currentUser!.uid
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
