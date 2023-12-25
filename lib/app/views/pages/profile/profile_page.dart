@@ -86,9 +86,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 url = tem.url;
               }
               if (url != null) {
-                FirebaseDatabase.instance
+                await FirebaseDatabase.instance
                     .ref("/user/${FirebaseAuth.instance.currentUser!.uid}/img")
                     .set(url);
+                await FirebaseAuth.instance.currentUser!.updatePhotoURL(url);
                 accountInfo.img.value = url;
                 // ignore: use_build_context_synchronously
                 if (Navigator.canPop(context)) Navigator.pop(context);
@@ -184,6 +185,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                         .ref(
                                             "/user/${FirebaseAuth.instance.currentUser!.uid}/userName")
                                         .set(name.text);
+                                    await FirebaseAuth.instance.currentUser!
+                                        .updateDisplayName(name.text);
                                     // ignore: use_build_context_synchronously
                                     if (Navigator.canPop(context)) {
                                       // ignore: use_build_context_synchronously

@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../core/show_toast_meassage.dart';
@@ -23,8 +24,10 @@ class _PublicProfilePageState extends State<PublicProfilePage> {
   IconData postHideIcon = Icons.keyboard_arrow_right;
   IconData fllowersHideIcon = Icons.keyboard_arrow_right;
   Widget mainWidget = const Center(child: CircularProgressIndicator());
+  String fllowText = "Follow";
+  late AccountModel userModel;
 
-  void buildWidget(AccountModel userModel) {
+  void buildWidget() {
     Widget temWidget = ListView(
       children: [
         Center(
@@ -137,6 +140,53 @@ class _PublicProfilePageState extends State<PublicProfilePage> {
           ],
         ),
         const Divider(),
+        widget.uid == FirebaseAuth.instance.currentUser!.uid
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                      onPressed: () async {
+                        final user = FirebaseAuth.instance.currentUser!;
+                        final userRef =
+                            FirebaseDatabase.instance.ref('user/${user.uid}/');
+
+                        if (userModel.followers.contains(widget.uid)) {
+                          userModel.followers.remove(widget.uid);
+                          setState(() {
+                            fllowText = "Follow";
+                          });
+                          buildWidget();
+                        } else {
+                          userModel.followers.add(widget.uid);
+                          setState(() {
+                            fllowText = "Unfollow";
+                          });
+                          buildWidget();
+                        }
+                        await userRef.update(userModel.toJson());
+                      },
+                      child: Text(fllowText)),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  ElevatedButton.icon(
+                      onPressed: () async {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) => const Center(
+                            child: Text(
+                              "Feature is under developemnt",
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(FontAwesomeIcons.message),
+                      label: const Text("Message"))
+                ],
+              )
+            : const SizedBox(),
+        const Divider(),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -156,7 +206,7 @@ class _PublicProfilePageState extends State<PublicProfilePage> {
                       ? postHideIcon = Icons.keyboard_arrow_right
                       : postHideIcon = Icons.keyboard_arrow_down;
                 });
-                buildWidget(userModel);
+                buildWidget();
               },
               icon: Icon(
                 postHideIcon,
@@ -179,7 +229,7 @@ class _PublicProfilePageState extends State<PublicProfilePage> {
           await FirebaseDatabase.instance.ref("/user/${widget.uid}").get();
       Map<String, dynamic> userData =
           Map<String, dynamic>.from(jsonDecode(jsonEncode(data.value)));
-      AccountModel userModel = AccountModel(
+      userModel = AccountModel(
         userName: userData['userName'],
         userEmail: userData['userEmail'],
         img: userData['img'] ?? "null",
@@ -188,7 +238,12 @@ class _PublicProfilePageState extends State<PublicProfilePage> {
         uid: widget.uid,
         allowMessages: userData['allowMessages'] ?? false,
       );
-      buildWidget(userModel);
+      if (userModel.followers.contains(widget.uid)) {
+        setState(() {
+          fllowText = "Unfollow";
+        });
+      }
+      buildWidget();
     } catch (e) {
       setState(() {
         mainWidget = const Center(
