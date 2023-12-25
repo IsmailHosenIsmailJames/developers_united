@@ -51,13 +51,13 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyC2Iat7HTtnKDAivp8uZ1xLKyuY0BXzMf8',
-    appId: '1:95856586450:web:d33f01d494694affd7070b',
+    appId: '1:95856586450:web:5b59214149d289add7070b',
     messagingSenderId: '95856586450',
     projectId: 'developersunited',
     authDomain: 'developersunited.firebaseapp.com',
     databaseURL: 'https://developersunited-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'developersunited.appspot.com',
-    measurementId: 'G-B02Q04L8E6',
+    measurementId: 'G-54Y84C237L',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
