@@ -14,8 +14,8 @@ import '../../../../data/models/post_models.dart';
 import '../../../accounts/account_info_controller.dart';
 import '../../home/home.dart';
 
-class PublishPost extends StatefulWidget {
-  const PublishPost(
+class PublishTopic extends StatefulWidget {
+  const PublishTopic(
       {super.key,
       required this.name,
       required this.id,
@@ -28,10 +28,10 @@ class PublishPost extends StatefulWidget {
   final String contentType;
 
   @override
-  State<PublishPost> createState() => _PublishPostState();
+  State<PublishTopic> createState() => _PublishTopicState();
 }
 
-class _PublishPostState extends State<PublishPost> {
+class _PublishTopicState extends State<PublishTopic> {
   String? owner = FirebaseAuth.instance.currentUser!.email;
   final accuntInfo = Get.put(AccountInfoController());
 

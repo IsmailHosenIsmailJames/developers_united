@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../publish_post/publish_topic.dart';
+import '../publish_post/publish_post.dart';
 import 'create_post_view_quill.dart';
 
 class PreViewOfPostQuill extends StatefulWidget {
