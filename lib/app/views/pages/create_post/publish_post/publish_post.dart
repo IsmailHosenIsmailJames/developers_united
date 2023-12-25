@@ -82,11 +82,9 @@ class _PublishPostState extends State<PublishPost> {
         ownerName: accuntInfo.name.value,
         description: descriptionController.text,
         content: "classContent/$id",
-        likeCount: "0",
         likes: {
           "id": Like(uid: "null", date: "date"),
         },
-        commentsCount: "0",
         comments: {
           "id": Comment(
             profile: "null",

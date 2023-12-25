@@ -416,13 +416,9 @@ class _SingleClassPostState extends State<SingleClassPost> {
                   }
                 });
                 if (isDisLike) {
-                  int likeCount = int.parse(postData.likeCount);
+                  int likeCount = postData.likes.length;
                   likeCount--;
                   if (likeCount < 0) return;
-                  await FirebaseDatabase.instance
-                      .ref("${widget.path}/likeCount")
-                      .set(likeCount.toString());
-                  postData.likeCount = likeCount.toString();
 
                   await FirebaseDatabase.instance
                       .ref("${widget.path}/likes/$dislikeKey/")
@@ -430,21 +426,18 @@ class _SingleClassPostState extends State<SingleClassPost> {
                   postData.likes.remove(dislikeKey);
                   creatWidget(postData, false);
                 } else {
-                  int likeCount = int.parse(postData.likeCount);
                   final date = DateTime.now();
                   Like likeData = Like(
                       uid: FirebaseAuth.instance.currentUser!.uid,
                       date:
                           "${date.second}:${date.minute}:${date.hour} ${date.day}/${date.month}/${date.year}");
                   await FirebaseDatabase.instance
-                      .ref("${widget.path}/likes/$likeCount/")
+                      .ref(
+                          "${widget.path}/likes/${date.millisecondsSinceEpoch}")
                       .set(likeData.toMap());
-                  postData.likes.addAll({likeCount.toString(): likeData});
-                  likeCount++;
-                  await FirebaseDatabase.instance
-                      .ref("${widget.path}/likeCount")
-                      .set(likeCount.toString());
-                  postData.likeCount = likeCount.toString();
+                  postData.likes.addAll(
+                      {date.millisecondsSinceEpoch.toString(): likeData});
+
                   creatWidget(postData, false);
                 }
               },
@@ -458,7 +451,7 @@ class _SingleClassPostState extends State<SingleClassPost> {
                       color: Colors.grey,
                     ),
               label: Text(
-                widget.fullData.likeCount,
+                (widget.fullData.likes.length - 1).toString(),
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -503,46 +496,27 @@ class _SingleClassPostState extends State<SingleClassPost> {
                                       onPressed: () async {
                                         Navigator.pop(context);
                                         final time = DateTime.now();
-                                        final coments =
-                                            widget.fullData.comments;
-                                        coments.addAll({
-                                          widget.fullData.commentsCount:
-                                              Comment(
-                                            profile: accountInfo.img.value,
-                                            email: FirebaseAuth
-                                                .instance.currentUser!.email
-                                                .toString(),
-                                            date:
-                                                "Date: ${time.day}/${time.month}/${time.year} at ${time.hour}:${time.minute}:${time.second}",
-                                            uid: FirebaseAuth
-                                                .instance.currentUser!.uid,
-                                            message: commentTextController.text
-                                                .trim(),
-                                          ),
-                                        });
+                                        Comment comment = Comment(
+                                          profile: accountInfo.img.value,
+                                          email: FirebaseAuth
+                                              .instance.currentUser!.email
+                                              .toString(),
+                                          date:
+                                              "Date: ${time.day}/${time.month}/${time.year} at ${time.hour}:${time.minute}:${time.second}",
+                                          uid: FirebaseAuth
+                                              .instance.currentUser!.uid,
+                                          message:
+                                              commentTextController.text.trim(),
+                                        );
+
                                         await FirebaseDatabase.instance
                                             .ref(
-                                                "${widget.path}/commentsCount/")
-                                            .set(
-                                                "${int.parse(postData.commentsCount) + 1}");
-                                        Map<String, dynamic> tem = {};
-                                        coments.forEach((key, value) {
-                                          tem.addAll({key: value.toMap()});
-                                        });
-                                        await FirebaseDatabase.instance
-                                            .ref("${widget.path}/comments/")
-                                            .update(tem);
+                                                "${widget.path}/comments/${time.millisecondsSinceEpoch}")
+                                            .set(comment.toMap());
                                         commentTextController.clear();
-
-                                        setState(() {
-                                          postData.commentsCount = (int.parse(
-                                                      postData.commentsCount) +
-                                                  1)
-                                              .toString();
-                                          final x = widget.fullData.toMap();
-                                          x["comments"] = tem;
-
-                                          postData = PostModel.fromMap(x);
+                                        postData.comments.addAll({
+                                          time.microsecondsSinceEpoch
+                                              .toString(): comment
                                         });
                                         creatWidget(postData, false);
                                       },
@@ -565,7 +539,7 @@ class _SingleClassPostState extends State<SingleClassPost> {
                 color: Colors.green,
               ),
               label: Text(
-                postData.commentsCount,
+                (postData.comments.length - 1).toString(),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

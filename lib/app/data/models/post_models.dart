@@ -12,10 +12,8 @@ class PostModel {
   String description;
   String content;
   String ownerName;
-  String likeCount;
   String profile;
   Map<String, Like> likes;
-  String commentsCount;
   Map<String, Comment> comments;
   String share;
   String impression;
@@ -32,10 +30,8 @@ class PostModel {
     required this.description,
     required this.content,
     required this.ownerName,
-    required this.likeCount,
     required this.profile,
     required this.likes,
-    required this.commentsCount,
     required this.comments,
     required this.share,
     required this.impression,
@@ -57,11 +53,9 @@ class PostModel {
         description: json["description"],
         content: json["content"],
         ownerName: json["ownerName"],
-        likeCount: json["likeCount"],
         profile: json["profile"],
         likes: Map.from(json["likes"])
             .map((k, v) => MapEntry<String, Like>(k, Like.fromMap(v))),
-        commentsCount: json["commentsCount"],
         comments: Map.from(json["comments"])
             .map((k, v) => MapEntry<String, Comment>(k, Comment.fromMap(v))),
         share: json["share"],
@@ -80,11 +74,9 @@ class PostModel {
         "description": description,
         "content": content,
         "ownerName": ownerName,
-        "likeCount": likeCount,
         "profile": profile,
         "likes": Map.from(likes)
             .map((k, v) => MapEntry<String, dynamic>(k, v.toMap())),
-        "commentsCount": commentsCount,
         "comments": Map.from(comments)
             .map((k, v) => MapEntry<String, dynamic>(k, v.toMap())),
         "share": share,

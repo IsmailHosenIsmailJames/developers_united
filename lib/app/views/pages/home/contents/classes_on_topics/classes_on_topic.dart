@@ -140,7 +140,8 @@ class _ClassesOnTopicsState extends State<ClassesOnTopics> {
                             Get.to(
                               () => SingleClassPost(
                                 fullData: listOfTopics[index],
-                                path: "${widget.path}/$index",
+                                path:
+                                    "${widget.path}/${listOfTopics[index].id}",
                               ),
                             );
                           },
@@ -302,7 +303,9 @@ class _ClassesOnTopicsState extends State<ClassesOnTopics> {
                                       const SizedBox(
                                         width: 5,
                                       ),
-                                      Text(listOfTopics[index].likeCount),
+                                      Text(
+                                          (listOfTopics[index].likes.length - 1)
+                                              .toString()),
                                       const Spacer(
                                         flex: 2,
                                       ),

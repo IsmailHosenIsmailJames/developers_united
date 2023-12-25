@@ -99,11 +99,9 @@ class _PublishTopicState extends State<PublishTopic> {
         ownerName: accuntInfo.name.value,
         description: descriptionController.text,
         content: contentPath,
-        likeCount: "0",
         likes: {
           "id": Like(uid: "null", date: "date"),
         },
-        commentsCount: "0",
         comments: {
           "id": Comment(
             profile: "null",
