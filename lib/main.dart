@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timezone/data/latest.dart';
@@ -11,7 +12,8 @@ import 'app/views/pages/home/getx_controller.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   initializeTimeZones();
   await Hive.initFlutter();
   await Hive.openBox('tpi_programming_club');
@@ -57,6 +59,7 @@ class MyApp extends StatelessWidget {
         var controller = Get.put(AppThemeData());
         Get.put(HomeGetController());
         controller.initTheme();
+        FlutterNativeSplash.remove();
       },
       home: const InIt(),
     );
