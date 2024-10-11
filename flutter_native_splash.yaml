@@ -1,7 +1,0 @@
-flutter_native_splash:
-  color: "#ffffff"
-  image: assets/img/spalsh.png
-  branding: assets/img/spalsh.png
-  color_dark: "#000000"
-  image_dark: assets/img/spalsh.png
-  branding_dark: assets/img/spalsh.png
